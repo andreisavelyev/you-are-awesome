@@ -1,9 +1,36 @@
 // DO WHATEVER YOU WANT HERE
 
-const createEnumerableProperty = () => {};
-const createNotEnumerableProperty = () => {};
-const createProtoMagicObject = () => {};
-const incrementor = () => {};
+const createEnumerableProperty = prop => {
+  return prop;
+};
+const createNotEnumerableProperty = prop => {
+  Object.defineProperty(Object.prototype, prop, {
+    enumerable: false,
+    set: value => (prop = value),
+    get: () => prop
+  });
+  return prop;
+};
+const createProtoMagicObject = () => {
+  function f() {}
+  f.__proto__ = f.prototype;
+  return f;
+};
+const incrementor = (() => {
+  let num = 0;
+
+  function inc() {
+    ++num;
+
+    return inc;
+  }
+
+  inc.toString = function() {
+    return num;
+  };
+  return inc;
+})();
+
 const asyncIncrementor = () => {};
 const createIncrementer = () => {};
 
@@ -12,7 +39,9 @@ const returnBackInSecond = () => {};
 const getDeepPropertiesCount = () => {};
 const createSerializedObject = () => {};
 const toBuffer = () => {};
-const sortByProto = () => {};
+const sortByProto = arr => {
+  return arr.sort((a, b) => b.__proto__ - a.__proto__);
+};
 
 exports.createEnumerableProperty = createEnumerableProperty;
 exports.createNotEnumerableProperty = createNotEnumerableProperty;
