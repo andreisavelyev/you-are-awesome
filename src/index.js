@@ -1,8 +1,7 @@
 // DO WHATEVER YOU WANT HERE
 
-const createEnumerableProperty = prop => {
-  return prop;
-};
+const createEnumerableProperty = prop => prop;
+
 const createNotEnumerableProperty = prop => {
   Object.defineProperty(Object.prototype, prop, {
     enumerable: false,
@@ -19,25 +18,48 @@ const createProtoMagicObject = () => {
 const incrementor = (() => {
   let num = 0;
 
-  function inc() {
+  const inc = () => {
     ++num;
 
     return inc;
-  }
-
-  inc.toString = function() {
-    return num;
   };
+
+  inc.toString = () => num;
+
   return inc;
 })();
 
-const asyncIncrementor = () => {};
-const createIncrementer = () => {};
+let asyncNum = 0;
+const asyncIncrementor = () => {
+  return new Promise(resolve => {
+    return resolve(++asyncNum);
+  });
+};
+
+const createIncrementer = () => {
+  let a = 0;
+
+  function* incr() {
+    do {
+      yield ++a;
+    } while (a);
+  }
+
+  return incr();
+};
 
 // return same argument not earlier than in one second, and not later, than in two
-const returnBackInSecond = () => {};
-const getDeepPropertiesCount = () => {};
-const createSerializedObject = () => {};
+const returnBackInSecond = param => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(param);
+    }, 1000);
+  });
+};
+const getDeepPropertiesCount = obj => {
+  return JSON.stringify(obj).match(/\d+/g).length;
+};
+const createSerializedObject = () => new String();
 const toBuffer = () => {};
 const sortByProto = arr => {
   return arr.sort((a, b) => b.__proto__ - a.__proto__);
